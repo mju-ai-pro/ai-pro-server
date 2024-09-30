@@ -42,16 +42,20 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
 
         if (passwordEncoder.matches(request.getPassword(), member.getPassword())) {
-            SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)); // 비밀 키 생성
-            // Generate JWT token upon successful login
+            SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
             return Jwts.builder()
                     .setSubject(member.getEmail())
                     .setIssuedAt(new Date())
-                    .setExpiration(new Date(System.currentTimeMillis() + 864_000_00)) // 1 day expiration
-                    .signWith(secretKey, SignatureAlgorithm.HS512)  // Use a secure key
+                    .setExpiration(new Date(System.currentTimeMillis() + 864_000_00))
+                    .signWith(secretKey, SignatureAlgorithm.HS512)
                     .compact();
         } else {
             throw new IllegalArgumentException("Invalid email or password");
         }
+    }
+
+    public Member findByEmail(String email){
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 }

@@ -30,11 +30,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // No session will be created
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/member/login", "/api/member/signup").permitAll()  // Publicly accessible endpoints
-                        .anyRequest().authenticated()  // All other endpoints require authentication
+                        .requestMatchers("/api/member/login", "/api/member/signup").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(http), secret), UsernamePasswordAuthenticationFilter.class);  // Add JWT filter
         return http.build();
