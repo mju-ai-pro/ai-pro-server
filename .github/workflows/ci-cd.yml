@@ -2,6 +2,11 @@ name: CI CD
 on:
   push:
     branches: ['main']
+  workflow_run:
+    workflows: [SonarCloud]
+    types:
+      - completed
+
 env:
   EC2_USERNAME: ubuntu
   AWS_REGION: ap-northeast-2
