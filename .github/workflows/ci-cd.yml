@@ -1,0 +1,58 @@
+name: CI CD
+on:
+  push:
+    branches: ['main']
+env:
+  EC2_USERNAME: ubuntu
+  AWS_REGION: ap-northeast-2
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Check Build Output
+        run: |
+          pwd
+          ls -R
+          ls -la build/libs
+      - name: AWS Authentication
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+      - name: Prepare EC2 environment
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_PUBLIC_IP }}
+          username: ${{ env.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo mkdir -p /home/AiPro-Spring
+            sudo chown -R ${{ env.EC2_USERNAME }}:${{ env.EC2_USERNAME }} /home/AiPro-Spring
+            sudo chmod 755 /home/AiPro-Spring
+      - name: Deploy to AWS EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_PUBLIC_IP }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          echo "$EC2_SSH_KEY" > private_key && chmod 600 private_key
+          scp -o StrictHostKeyChecking=no -i private_key build/libs/AiPro-0.0.1-SNAPSHOT.jar ${EC2_USERNAME}@${EC2_HOST}:/home/AiPro-Spring/
+          rm -f private_key
+      - name: Restart Application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_PUBLIC_IP }}
+          username: ${{ env.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo chmod +x /home/AiPro-Spring/AiPro-0.0.1-SNAPSHOT.jar
+            sudo systemctl restart aipro.service
