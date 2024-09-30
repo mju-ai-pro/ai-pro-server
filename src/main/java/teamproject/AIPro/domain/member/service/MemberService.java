@@ -1,6 +1,8 @@
 package teamproject.AIPro.domain.member.service;
 
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import teamproject.AIPro.domain.member.dto.request.LoginRequest;
 import teamproject.AIPro.domain.member.dto.request.SignupRequest;
 import teamproject.AIPro.domain.member.dto.response.MemberResponse;
@@ -8,6 +10,8 @@ import teamproject.AIPro.domain.member.entity.Member;
 import teamproject.AIPro.domain.member.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public class MemberService {
@@ -26,13 +30,18 @@ public class MemberService {
         return new MemberResponse(member.getId(), member.getEmail(), member.getUsername());
     }
 
-    public boolean login(LoginRequest request) {
+    public String login(LoginRequest request) {
         Member member = memberRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
 
-        // 단순 비밀번호 확인
         if (passwordEncoder.matches(request.getPassword(), member.getPassword())) {
-            return true;  // 로그인 성공
+            // Generate JWT token upon successful login
+            return Jwts.builder()
+                    .setSubject(member.getEmail())
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + 864_000_00)) // 1 day expiration
+                    .signWith(SignatureAlgorithm.HS512, "JwTSeCrEtKeYwiThAtLeAsT64ChArAcTeRs12345678901234567890JwTSeCrEtKeYwiThAtLeAsT64ChArAcTeRs12345678901234567890")  // Use a secure key
+                    .compact();
         } else {
             throw new IllegalArgumentException("Invalid email or password");
         }

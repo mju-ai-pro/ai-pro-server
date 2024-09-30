@@ -25,11 +25,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        boolean isSuccess = memberService.login(loginRequest);
-        if (isSuccess) {
-            return ResponseEntity.ok("Login successful");
-        } else {
-            return ResponseEntity.status(401).body("Login failed");
-        }
+        String token = memberService.login(loginRequest);
+        return ResponseEntity.ok(token);  // Return JWT token in response
     }
 }
