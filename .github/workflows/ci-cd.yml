@@ -1,7 +1,5 @@
 name: CI CD
 on:
-  push:
-    branches: ['main']
   workflow_run:
     workflows: ["SonarCloud"]
     types:
