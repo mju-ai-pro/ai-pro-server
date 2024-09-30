@@ -28,4 +28,9 @@ public class MemberController {
         String token = memberService.login(loginRequest);
         return ResponseEntity.ok(token);  // Return JWT token in response
     }
+
+    @GetMapping("/test")
+    public String test(){
+        return "test";
+    }
 }
