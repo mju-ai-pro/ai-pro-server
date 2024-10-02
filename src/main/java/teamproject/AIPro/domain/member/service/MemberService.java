@@ -5,6 +5,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import teamproject.AIPro.domain.member.dto.request.LoginRequest;
 import teamproject.AIPro.domain.member.dto.request.SignupRequest;
 import teamproject.AIPro.domain.member.dto.response.MemberResponse;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Date;
 
 @Service

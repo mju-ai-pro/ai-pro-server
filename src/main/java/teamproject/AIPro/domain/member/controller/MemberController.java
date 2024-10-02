@@ -10,6 +10,8 @@ import teamproject.AIPro.domain.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/member")
 public class MemberController {
@@ -32,13 +34,14 @@ public class MemberController {
         return ResponseEntity.ok(token);
     }
 
-    @GetMapping("/test")
+    @GetMapping("/jwttest")
     public String test(){
         return "test";
     }
 
     @GetMapping("/user")
-    public Member getMemberInfo(@AuthenticationPrincipal UserDetails userDetails){
-        return memberService.findByEmail(userDetails.getUsername());
+    public Member getMemberInfo(Principal principal){
+        String email = principal.getName(); // 이메일을 가져옴
+        return memberService.findByEmail(email);
     }
 }
