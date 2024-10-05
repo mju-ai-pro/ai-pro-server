@@ -4,6 +4,7 @@ import teamproject.AIPro.domain.member.dto.request.AiRequest;
 import teamproject.AIPro.domain.member.dto.request.ChatRequest;
 import teamproject.AIPro.domain.member.dto.response.ChatResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,7 +12,9 @@ import org.springframework.web.client.RestTemplate;
 public class ChatService {
 
     private ChatHistoryService chatHistoryService;
-    final String uri = "http://15.165.114.217/:5000/query";
+
+    @Value("${ai.uri}")
+    private String uri;
 
     public ChatService(ChatHistoryService chatHistoryService) {
         this.chatHistoryService = chatHistoryService;
