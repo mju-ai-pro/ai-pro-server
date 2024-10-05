@@ -1,16 +1,15 @@
 name: CI CD
+
 on:
-  workflow_run:
-    workflows: ["SonarCloud"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
 
 env:
   EC2_USERNAME: ubuntu
   AWS_REGION: ap-northeast-2
 jobs:
   build:
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
