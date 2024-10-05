@@ -24,11 +24,13 @@ public class ChatService {
     // 응답을 String 값으로 가져옴
     public ChatResponse question(ChatRequest request) {
         RestTemplate restTemplate = new RestTemplate();
+
         AiRequest aiRequest = new AiRequest();
         aiRequest.setUserId(request.getUserId());
         aiRequest.setQuestion(request.getQuestion());
         aiRequest.setRole(request.getRole());
         aiRequest.setChatHistory(chatHistoryService.getChatHistory(request.getUserId()));
+        
         ChatResponse response = new ChatResponse(restTemplate.postForObject(uri, request,String.class));
 
         return response;    
