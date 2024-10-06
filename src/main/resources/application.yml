@@ -14,4 +14,4 @@ spring:
       hibernate:
         format_sql: true
 ai:
-  uri: http://15.165.114.217/:5000/query
+  uri: http://15.165.114.217:5000/query

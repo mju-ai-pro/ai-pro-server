@@ -4,7 +4,6 @@ import teamproject.AIPro.domain.member.dto.request.ChatRequest;
 import teamproject.AIPro.domain.member.dto.response.ChatResponse;
 import teamproject.AIPro.domain.member.service.ChatService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
