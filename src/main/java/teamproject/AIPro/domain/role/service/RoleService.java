@@ -14,10 +14,10 @@ public class RoleService {
         return new RoleResponse(currentRole);
     }
 
-    public RoleResponse getRole() {
+    public String getRole() {
         if (currentRole == null) {
             throw new RuntimeException("Role이 설정되지 않았습니다.");
         }
-        return new RoleResponse(currentRole);
+        return currentRole;
     }
 }
