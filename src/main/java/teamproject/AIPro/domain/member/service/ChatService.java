@@ -8,6 +8,10 @@ import teamproject.AIPro.domain.member.entity.ChatHistory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import teamproject.AIPro.domain.role.service.RoleService;
 
 import java.util.List;
@@ -18,7 +22,6 @@ public class ChatService {
 
     private final ChatHistoryService chatHistoryService;
     private final RoleService roleService;
-
 
     @Value("${ai.uri}")
     private String uri;
@@ -38,11 +41,17 @@ public class ChatService {
         aiRequest.setRole(roleService.getRole());
 
         List<String> chatHistory = convertChatHistoryToList(chatHistoryService.getChatHistory(request.getUserId()));
-        aiRequest.setChatHistory(chatHistory); 
+        aiRequest.setChatHistory(chatHistory);
 
         try {
             String response = restTemplate.postForObject(uri, aiRequest, String.class);
-            return new ChatResponse(response);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response);
+
+            String message = rootNode.path("message").asText();
+
+            return new ChatResponse(message);
         } catch (Exception e) {
             System.err.println("Error occurred while calling AI server: " + e.getMessage());
             return new ChatResponse("Error: Unable to get response from AI server.");
@@ -56,7 +65,7 @@ public class ChatService {
 
         // 각 대화 내역을 "User: 질문\nBot: 응답" 형태의 문자열로 변환하여 리스트로 반환
         return chatHistories.stream()
-            .map(history -> "User: " + history.getQuestion() + "\nBot: " + history.getResponse())
-            .collect(Collectors.toList());
+                .map(history -> "User: " + history.getQuestion() + "\nBot: " + history.getResponse())
+                .collect(Collectors.toList());
     }
 }
