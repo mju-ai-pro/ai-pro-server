@@ -23,8 +23,7 @@ public class RoleController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<RoleResponse> getRole() {
-        RoleResponse response = roleService.getRole();
-        return ResponseEntity.ok(response);
+    public String getRole() {
+        return roleService.getRole();
     }
 }

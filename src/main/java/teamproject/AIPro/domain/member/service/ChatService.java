@@ -8,6 +8,8 @@ import teamproject.AIPro.domain.member.entity.ChatHistory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import teamproject.AIPro.domain.role.service.RoleService;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,12 +17,15 @@ import java.util.stream.Collectors;
 public class ChatService {
 
     private final ChatHistoryService chatHistoryService;
+    private final RoleService roleService;
+
 
     @Value("${ai.uri}")
     private String uri;
 
-    public ChatService(ChatHistoryService chatHistoryService) {
+    public ChatService(ChatHistoryService chatHistoryService, RoleService roleService) {
         this.chatHistoryService = chatHistoryService;
+        this.roleService = roleService;
     }
 
     // RestTmeplate으로 AI 서버의 API 호출
@@ -30,7 +35,7 @@ public class ChatService {
         AiRequest aiRequest = new AiRequest();
         aiRequest.setUserId(request.getUserId());
         aiRequest.setQuestion(request.getQuestion());
-        aiRequest.setRole(request.getRole());
+        aiRequest.setRole(roleService.getRole());
 
         List<String> chatHistory = convertChatHistoryToList(chatHistoryService.getChatHistory(request.getUserId()));
         aiRequest.setChatHistory(chatHistory); 
