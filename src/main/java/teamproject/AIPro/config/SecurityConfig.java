@@ -19,7 +19,7 @@ import teamproject.AIPro.config.jwt.JwtAuthenticationFilter;
 public class SecurityConfig {
 
     @Value("${jwt.secret}")
-    private String secret; // 비밀 키 주입
+    private String secret;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -32,13 +32,11 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/member/login", "/api/member/signup","/api/saveQuestion",
-                                "/api/chat/question").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); 
+                        .anyRequest().permitAll()
+                );
         return http.build();
     }
+
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) {
