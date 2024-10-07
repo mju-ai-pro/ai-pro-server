@@ -16,7 +16,7 @@ public class RoleService {
 
     public String getRole() {
         if (currentRole == null) {
-            throw new RuntimeException("Role이 설정되지 않았습니다.");
+            return " ";
         }
         return currentRole;
     }
