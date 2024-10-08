@@ -1,8 +1,8 @@
-package teamproject.AIPro.domain.member.controller;
+package teamproject.AIPro.domain.chat.controller;
 
-import teamproject.AIPro.domain.member.dto.request.ChatRequest;
-import teamproject.AIPro.domain.member.dto.response.ChatResponse;
-import teamproject.AIPro.domain.member.service.ChatService;
+import teamproject.AIPro.domain.chat.dto.request.ChatRequest;
+import teamproject.AIPro.domain.chat.dto.response.ChatResponse;
+import teamproject.AIPro.domain.chat.service.ChatService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

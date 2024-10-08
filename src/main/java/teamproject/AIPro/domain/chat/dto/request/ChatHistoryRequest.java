@@ -1,13 +1,13 @@
-package teamproject.AIPro.domain.member.dto.request;
+package teamproject.AIPro.domain.chat.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ChatRequest {
+public class ChatHistoryRequest {
     private String userId;
     private String question;
-    private String role;
-}
+    private String response;
 
+}

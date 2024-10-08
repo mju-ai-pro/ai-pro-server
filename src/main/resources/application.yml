@@ -2,10 +2,15 @@ jwt:
   secret: secretkeyteamprojectAiProMJUsecretkeyteamprojectAiProMJUsecretkeyteamprojectAiProMJUsecretkeyteamprojectAiProMJU
 spring:
   datasource:
-    url: ${MYSQL_URL}
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://127.0.0.1:3306/std
+    username: user
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+  # datasource:
+  #   url: ${MYSQL_URL}
+  #   username: ${MYSQL_USERNAME}
+  #   password: ${MYSQL_PASSWORD}
+  #   driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
