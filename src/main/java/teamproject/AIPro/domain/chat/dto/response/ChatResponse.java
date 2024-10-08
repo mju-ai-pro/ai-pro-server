@@ -1,4 +1,4 @@
-package teamproject.AIPro.domain.member.dto.response;
+package teamproject.AIPro.domain.chat.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

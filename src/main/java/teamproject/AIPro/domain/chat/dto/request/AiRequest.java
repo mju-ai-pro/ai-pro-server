@@ -1,4 +1,4 @@
-package teamproject.AIPro.domain.member.dto.request;
+package teamproject.AIPro.domain.chat.dto.request;
 
 import java.util.List;
 

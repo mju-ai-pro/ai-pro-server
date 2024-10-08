@@ -1,9 +1,9 @@
-package teamproject.AIPro.domain.member.service;
+package teamproject.AIPro.domain.chat.service;
 
-import teamproject.AIPro.domain.member.dto.request.AiRequest;
-import teamproject.AIPro.domain.member.dto.request.ChatRequest;
-import teamproject.AIPro.domain.member.dto.response.ChatResponse;
-import teamproject.AIPro.domain.member.entity.ChatHistory;
+import teamproject.AIPro.domain.chat.dto.request.AiRequest;
+import teamproject.AIPro.domain.chat.dto.request.ChatRequest;
+import teamproject.AIPro.domain.chat.dto.response.ChatResponse;
+import teamproject.AIPro.domain.chat.entity.ChatHistory;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -54,6 +54,7 @@ public class ChatService {
             return new ChatResponse(message);
         } catch (Exception e) {
             System.err.println("Error occurred while calling AI server: " + e.getMessage());
+            e.printStackTrace();
             return new ChatResponse("Error: Unable to get response from AI server.");
         }
     }
