@@ -8,6 +8,7 @@ import teamproject.AIPro.domain.role.service.RoleService;
 
 @RestController
 @RequestMapping("/api/role")
+@CrossOrigin(origins = "*")
 public class RoleController {
 
     private final RoleService roleService;

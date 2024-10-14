@@ -1,6 +1,7 @@
 package teamproject.AIPro.domain.chat.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import teamproject.AIPro.domain.chat.service.ChatHistoryService;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class ChatHistoryController {
 
     @Autowired
