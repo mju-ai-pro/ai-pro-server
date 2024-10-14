@@ -8,5 +8,4 @@ import lombok.Setter;
 public class ChatRequest {
     private String userId;
     private String question;
-    private String role;
 }
