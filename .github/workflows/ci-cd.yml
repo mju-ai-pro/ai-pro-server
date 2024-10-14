@@ -62,13 +62,13 @@ jobs:
             echo "Quality Gate 통과"
           else
             echo "Quality Gate 통과 실패"
-            MESSAGE="❗ SonarCloud 품질 게이트 통과 실패: ${{ github.repository }} (${{ github.ref }})"
+            MESSAGE="❗ 배포 중 품질 게이트를 통과하지 못했습니다.: ${{ github.repository }} (${{ github.ref }})"
             DETAILS="자세한 내용: https://sonarcloud.io/dashboard?id=mju-ai-pro_ai-pro-server"
             
             DATA='{
               "embeds": [
                 {
-                  "title": "SonarCloud 품질 게이트 통과 실패",
+                  "title": "품질 게이트 통과 실패",
                   "description": "'"${MESSAGE}"'\n\n'"${DETAILS}"'",
                   "color": 16711680,
                   "footer": {
@@ -132,7 +132,7 @@ jobs:
         if: steps.deploy.outcome == 'success'
         run: |
           MESSAGE="✅ 애플리케이션이 성공적으로 배포되었습니다! : ${GITHUB_REPOSITORY} (${GITHUB_REF})"
-          DETAILS="해당 서버에서 실행 중입니다: https://hongkikii.site:444"
+          DETAILS="해당 서버에서 실행 중입니다: https://hongkikii.site"
           
           DATA='{
             "embeds": [
