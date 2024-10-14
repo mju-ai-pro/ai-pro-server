@@ -14,7 +14,6 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/member")
-@CrossOrigin(origins = "*")
 public class MemberController {
 
     private final MemberService memberService;
