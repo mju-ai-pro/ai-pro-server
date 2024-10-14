@@ -14,6 +14,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/member")
+@CrossOrigin(origins = "*")
 public class MemberController {
 
     private final MemberService memberService;
@@ -35,12 +36,12 @@ public class MemberController {
     }
 
     @GetMapping("/jwttest")
-    public String test(){
+    public String test() {
         return "test";
     }
 
     @GetMapping("/user")
-    public Member getMemberInfo(Principal principal){
+    public Member getMemberInfo(Principal principal) {
         String email = principal.getName(); // 이메일을 가져옴
         return memberService.findByEmail(email);
     }
