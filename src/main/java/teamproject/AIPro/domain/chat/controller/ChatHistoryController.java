@@ -1,6 +1,5 @@
 package teamproject.AIPro.domain.chat.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,11 @@ import teamproject.AIPro.domain.chat.service.ChatHistoryService;
 @RequestMapping("/api")
 public class ChatHistoryController {
 
-  @Autowired private ChatHistoryService chatHistoryService;
+  private final ChatHistoryService chatHistoryService;
+
+  private ChatHistoryController(ChatHistoryService chatHistoryService) {
+    this.chatHistoryService = chatHistoryService;
+  }
 
   @PostMapping("/saveQuestion")
   public ChatHistory saveUserQuestion(@RequestBody ChatHistoryRequest request) {
