@@ -7,17 +7,17 @@ import teamproject.AIPro.domain.role.dto.response.RoleResponse;
 @Service
 public class RoleService {
 
-    private String currentRole;
+  private String currentRole;
 
-    public RoleResponse setRole(RoleRequest roleRequest) {
-        this.currentRole = roleRequest.getRole();
-        return new RoleResponse(currentRole);
-    }
+  public RoleResponse setRole(RoleRequest roleRequest) {
+    this.currentRole = roleRequest.getRole();
+    return new RoleResponse(currentRole);
+  }
 
-    public String getRole() {
-        if (currentRole == null) {
-            return " ";
-        }
-        return currentRole;
+  public String getRole() {
+    if (currentRole == null) {
+      return " ";
     }
+    return currentRole;
+  }
 }

@@ -10,20 +10,20 @@ import teamproject.AIPro.domain.role.service.RoleService;
 @RequestMapping("/api/role")
 public class RoleController {
 
-    private final RoleService roleService;
+  private final RoleService roleService;
 
-    public RoleController(RoleService roleService) {
-        this.roleService = roleService;
-    }
+  public RoleController(RoleService roleService) {
+    this.roleService = roleService;
+  }
 
-    @PostMapping("/set")
-    public ResponseEntity<RoleResponse> setRole(@RequestBody RoleRequest roleRequest) {
-        RoleResponse response = roleService.setRole(roleRequest);
-        return ResponseEntity.ok(response);
-    }
+  @PostMapping("/set")
+  public ResponseEntity<RoleResponse> setRole(@RequestBody RoleRequest roleRequest) {
+    RoleResponse response = roleService.setRole(roleRequest);
+    return ResponseEntity.ok(response);
+  }
 
-    @GetMapping("/get")
-    public String getRole() {
-        return roleService.getRole();
-    }
+  @GetMapping("/get")
+  public String getRole() {
+    return roleService.getRole();
+  }
 }

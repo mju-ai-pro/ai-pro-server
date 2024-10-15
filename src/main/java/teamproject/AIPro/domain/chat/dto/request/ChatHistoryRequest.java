@@ -6,8 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ChatHistoryRequest {
-    private String userId;
-    private String question;
-    private String response;
-
+  private String userId;
+  private String question;
+  private String response;
 }
