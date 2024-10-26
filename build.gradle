@@ -3,6 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '3.3.4'
 	id 'io.spring.dependency-management' version '1.1.6'
 	id "org.sonarqube" version "4.4.1.3373"
+	id 'checkstyle'
 }
 
 group = 'com.example'
@@ -14,8 +15,27 @@ sonar {
 		property "sonar.projectKey", "mju-ai-pro_ai-pro-server"
 		property "sonar.organization", "mju-ai-pro"
 		property "sonar.host.url", "https://sonarcloud.io"
+		property 'sonar.java.checkstyle.reportPaths', 'build/reports/checkstyle/main.xml'
 	}
 }
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(Checkstyle) {
+	reports {
+		xml.required = true
+		html.required = true
+	}
+}
+
+checkstyle {
+	toolVersion = "10.12.5"
+	configFile = file("config/checkstyle/naver-checkstyle-rules.xml")
+	configProperties = ["suppressionFile": "checkstyle/naver-checkstyle-suppressions.xml"]
+}
+
+checkstyleMain.source = fileTree('src/main/java')
+
 
 repositories {
 	mavenCentral()
