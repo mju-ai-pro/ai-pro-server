@@ -53,7 +53,6 @@ public class ChatService {
 			return new ChatResponse(message);
 		} catch (Exception e) {
 			System.err.println("Error occurred while calling AI server: " + e.getMessage());
-			e.printStackTrace();
 			return new ChatResponse("Error: Unable to get response from AI server.");
 		}
 	}
