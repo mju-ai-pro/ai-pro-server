@@ -90,13 +90,26 @@ jobs:
     if: success()
     
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Check Build Output
+        run: |
+          pwd
+          ls -R
+          ls -la build/libs
       - name: AWS Authentication
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          
       - name: Prepare EC2 environment
         uses: appleboy/ssh-action@master
         with:
@@ -107,18 +120,15 @@ jobs:
             sudo mkdir -p /home/AiPro-Spring
             sudo chown -R ${{ env.EC2_USERNAME }}:${{ env.EC2_USERNAME }} /home/AiPro-Spring
             sudo chmod 755 /home/AiPro-Spring
-            
       - name: Deploy to AWS EC2
         env:
           EC2_HOST: ${{ secrets.EC2_PUBLIC_IP }}
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
         run: |
           echo "$EC2_SSH_KEY" > private_key && chmod 600 private_key
-          scp -o StrictHostKeyChecking=no -i private_key AiPro-0.0.1-SNAPSHOT.jar ${EC2_USERNAME}@${EC2_HOST}:/home/AiPro-Spring/
+          scp -o StrictHostKeyChecking=no -i private_key build/libs/AiPro-0.0.1-SNAPSHOT.jar ${EC2_USERNAME}@${EC2_HOST}:/home/AiPro-Spring/
           rm -f private_key
-          
-      - name: Restart Spring Application
-        id: deploy
+      - name: Restart Application
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_PUBLIC_IP }}
