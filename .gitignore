@@ -26,6 +26,7 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.vscode/
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -159,6 +160,7 @@ fabric.properties
 *.iml
 modules.xml
 .idea/misc.xml
+.idea
 *.ipr
 
 ### Java ###
