@@ -139,7 +139,7 @@ jobs:
             sudo systemctl restart aipro.service
       
       - name: Send Deployment Success Notification
-        if: steps.deploy.outcome == 'success'
+        if: success()
         run: |
           MESSAGE="✅ 애플리케이션이 성공적으로 배포되었습니다! : ${GITHUB_REPOSITORY} (${GITHUB_REF})"
           DETAILS="해당 서버에서 실행 중입니다: https://hongkikii.site"
