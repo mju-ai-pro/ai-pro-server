@@ -37,6 +37,11 @@ public class MemberController {
 		return ResponseEntity.ok(token);
 	}
 
+	@GetMapping("/duplicate")
+	public boolean duplicateCheck(@RequestBody SignupRequest request) {
+		return memberService.duplicateCheck(request);
+	}
+
 	@GetMapping("/jwttest")
 	public String test() {
 		return "test";
@@ -44,7 +49,7 @@ public class MemberController {
 
 	@GetMapping("/user")
 	public Member getMemberInfo(Principal principal) {
-		String email = principal.getName(); // 이메일을 가져옴
-		return memberService.findByEmail(email);
+		String userid = principal.getName();
+		return memberService.findByUserId(userid);
 	}
 }

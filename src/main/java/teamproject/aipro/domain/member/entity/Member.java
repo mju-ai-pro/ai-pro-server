@@ -18,7 +18,7 @@ public class Member {
 	private Long id;
 
 	@Column(nullable = false, unique = true)
-	private String email;
+	private String userid;
 
 	@Column(nullable = false)
 	private String password;
@@ -26,8 +26,8 @@ public class Member {
 	@Column(nullable = false)
 	private String username;
 
-	public Member(String email, String password, String username) {
-		this.email = email;
+	public Member(String userid, String password, String username) {
+		this.userid = userid;
 		this.password = password;
 		this.username = username;
 	}

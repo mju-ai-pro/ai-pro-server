@@ -37,17 +37,14 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 		ServletException {
 		String token = request.getHeader("Authorization");
 		if (token != null && token.startsWith("Bearer ")) {
-			token = token.replace("Bearer ", ""); // Bearer 접두사 제거
-
+			token = token.replace("Bearer ", "");
 			try {
 				Claims claims = Jwts.parserBuilder()
-					.setSigningKey(secretKey)  // 서명 키 설정
+					.setSigningKey(secretKey)
 					.build()
 					.parseClaimsJws(token)
 					.getBody();
-
 				String username = claims.getSubject();
-
 				if (username != null) {
 					UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
 						username, null, new ArrayList<>());
