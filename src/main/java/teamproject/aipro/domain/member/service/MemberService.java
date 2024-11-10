@@ -33,31 +33,40 @@ public class MemberService {
 	}
 
 	public MemberResponse signup(SignupRequest request) {
-		Member member = new Member(request.getEmail(), passwordEncoder.encode(request.getPassword()),
+		Member member = new Member(request.getUserid(), passwordEncoder.encode(request.getPassword()),
 			request.getUsername());
 		memberRepository.save(member);
-		return new MemberResponse(member.getId(), member.getEmail(), member.getUsername());
+		return new MemberResponse(member.getId(), member.getUserid(), member.getUsername());
 	}
 
 	public String login(LoginRequest request) {
-		Member member = memberRepository.findByEmail(request.getEmail())
-			.orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
-
+		Member member = memberRepository.findByuserid(request.getUserid())
+			.orElse(null);
+		if (member == null) {
+			return "Invalid id or password";
+		}
 		if (passwordEncoder.matches(request.getPassword(), member.getPassword())) {
 			SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 			return Jwts.builder()
-				.setSubject(member.getEmail())
+				.setSubject(member.getUserid())
 				.setIssuedAt(new Date())
 				.setExpiration(new Date(System.currentTimeMillis() + 864_000_00))
 				.signWith(secretKey, SignatureAlgorithm.HS512)
 				.compact();
 		} else {
-			throw new IllegalArgumentException("Invalid email or password");
+			return "Invalid id or password";
 		}
 	}
 
-	public Member findByEmail(String email) {
-		return memberRepository.findByEmail(email)
-			.orElseThrow(() -> new IllegalArgumentException("User not found"));
+	public Member findByUserId(String userId) {
+		return memberRepository.findByuserid(userId).orElse(null);
+	}
+
+	public boolean duplicateCheck(SignupRequest request) {
+		if (findByUserId(request.getUserid()) == null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

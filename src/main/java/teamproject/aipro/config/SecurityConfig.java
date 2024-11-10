@@ -29,10 +29,14 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			.csrf(csrf -> csrf.disable()) // CSRF 비활성화
+			.csrf(csrf -> csrf.disable())
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(requests -> requests
-				.anyRequest().permitAll());
+				.requestMatchers("/api/member/signup", "/api/member/login", "/api/member/duplicate").permitAll()
+				.anyRequest().authenticated()
+			)
+			.addFilter(new JwtAuthenticationFilter(
+				authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), secret));
 		return http.build();
 	}
 
