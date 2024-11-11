@@ -35,13 +35,6 @@ public class SecurityConfig {
 				.anyRequest().permitAll());
 		return http.build();
 	}
-	// 			.requestMatchers("/api/member/signup", "/api/member/login", "/api/member/duplicate").permitAll()
-	// 			.anyRequest().authenticated()
-	// 		)
-	// 		.addFilter(new JwtAuthenticationFilter(
-	// 			authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), secret));
-	// 	return http.build();
-	// }
 
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) {
