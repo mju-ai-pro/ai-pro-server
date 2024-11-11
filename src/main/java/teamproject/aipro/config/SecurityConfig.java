@@ -32,13 +32,16 @@ public class SecurityConfig {
 			.csrf(csrf -> csrf.disable())
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(requests -> requests
-				.requestMatchers("/api/member/signup", "/api/member/login", "/api/member/duplicate").permitAll()
-				.anyRequest().authenticated()
-			)
-			.addFilter(new JwtAuthenticationFilter(
-				authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), secret));
+				.anyRequest().permitAll());
 		return http.build();
 	}
+	// 			.requestMatchers("/api/member/signup", "/api/member/login", "/api/member/duplicate").permitAll()
+	// 			.anyRequest().authenticated()
+	// 		)
+	// 		.addFilter(new JwtAuthenticationFilter(
+	// 			authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), secret));
+	// 	return http.build();
+	// }
 
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) {

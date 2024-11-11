@@ -37,7 +37,7 @@ public class MemberController {
 		return ResponseEntity.ok(token);
 	}
 
-	@GetMapping("/duplicate")
+	@PostMapping("/duplicate")
 	public boolean duplicateCheck(@RequestBody SignupRequest request) {
 		return memberService.duplicateCheck(request);
 	}
