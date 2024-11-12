@@ -33,6 +33,7 @@ public class ChatHistoryController {
 
     @GetMapping("/getChatCatalog")
     public List<ChatCatalogResponse> getChatCatalog() {
-        return chatHistoryService.getChatCatalog();
-    }
+		return chatHistoryService.getChatCatalog();
+	}
+
 }
