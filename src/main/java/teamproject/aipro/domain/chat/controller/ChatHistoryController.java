@@ -28,6 +28,7 @@ public class ChatHistoryController {
 	}
 	@PostMapping("/getChatHistory")
 	public List<ChatHistory> getChatHistory(@RequestBody TempDto tempDto){
+		System.out.println();
 		return chatHistoryService.getChatHistory(tempDto.getUserId());
 	}
 	@Data
