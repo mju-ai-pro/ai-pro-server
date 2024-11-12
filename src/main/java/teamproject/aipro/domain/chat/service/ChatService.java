@@ -40,6 +40,7 @@ public class ChatService {
 		aiRequest.setRole(roleService.getRole());
 
 		List<String> chatHistory = convertChatHistoryToList(chatHistoryService.getChatHistory(request.getUserId()));
+		System.out.println("chatHistory.size() = " + chatHistory.size());
 		aiRequest.setChatHistory(chatHistory);
 
 		try {
@@ -49,6 +50,8 @@ public class ChatService {
 			JsonNode rootNode = objectMapper.readTree(response);
 
 			String message = rootNode.path("message").asText();
+			//ChatHistory 저장
+			chatHistoryService.saveChatHistory(request.getUserId(),request.getQuestion(),message);
 
 			return new ChatResponse(message);
 		} catch (Exception e) {
