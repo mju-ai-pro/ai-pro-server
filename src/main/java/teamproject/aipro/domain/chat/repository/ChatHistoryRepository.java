@@ -9,5 +9,5 @@ import teamproject.aipro.domain.chat.entity.ChatHistory;
 
 @Repository
 public interface ChatHistoryRepository extends JpaRepository<ChatHistory, Long> {
-	List<ChatHistory> findByUserId(String userId);
+	List<ChatHistory> findByChatInventory_Id(Long chatInventoryId);
 }

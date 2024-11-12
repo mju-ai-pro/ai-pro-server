@@ -1,12 +1,11 @@
 package teamproject.aipro.domain.chat.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -16,8 +15,10 @@ public class ChatHistory {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "user_id", nullable = false)
-	private String userId; // 유저 아이디
+	@ManyToOne
+	@JoinColumn(name = "chat_inventory_id")
+	@JsonIgnoreProperties("chatHistories") // 이 필드를 JSON 직렬화에서 제외
+	private ChatInventory chatInventory;
 
 	@Column(name = "question", nullable = false, columnDefinition = "TEXT")
 	private String question; // 질문 내용
@@ -25,9 +26,17 @@ public class ChatHistory {
 	@Column(name = "response", columnDefinition = "TEXT")
 	private String response; // 답변 내용
 
-	public ChatHistory(String userId, String question, String response) {
-		this.userId = userId;
+	public ChatHistory(String question, String response) {
 		this.question = question;
 		this.response = response;
 	}
+
+	public ChatInventory getChatInventory() {
+		return chatInventory;
+	}
+
+	public void setChatInventory(ChatInventory chatInventory) {
+		this.chatInventory = chatInventory;
+	}
+
 }
