@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import teamproject.aipro.domain.chat.dto.response.ChatCatalogResponse;
 import teamproject.aipro.domain.chat.dto.response.ChatHistoryResponse;
+import org.springframework.web.bind.annotation.PostMapping;
+import teamproject.aipro.domain.chat.dto.request.ChatHistoryRequest;
+import teamproject.aipro.domain.chat.entity.ChatHistory;
 import teamproject.aipro.domain.chat.service.ChatHistoryService;
 @RestController
 @RequestMapping("/api")
