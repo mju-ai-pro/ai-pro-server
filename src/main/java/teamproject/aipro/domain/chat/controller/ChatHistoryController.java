@@ -21,7 +21,7 @@ public class ChatHistoryController {
 	public List<ChatHistoryResponse> getChatHistory(@RequestParam String catalogId) {
 		return chatHistoryService.getChatHistory(catalogId);
 	}
-
+	 
 	@GetMapping("/getChatCatalog")
 	public List<ChatCatalogResponse> getChatCatalog() {
 		return chatHistoryService.getChatCatalog();
