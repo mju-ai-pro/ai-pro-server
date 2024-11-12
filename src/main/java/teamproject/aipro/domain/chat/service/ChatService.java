@@ -42,6 +42,7 @@ public class ChatService {
 		aiRequest.setChatHistory(new ArrayList<>());
 		//		List<String> chatHistory = convertChatHistoryToList(chatHistoryService.getChatHistory(opt));
 		//		aiRequest.setChatHistory(chatHistory);
+
 		try {
 			String response = restTemplate.postForObject(uri, aiRequest, String.class);
 
@@ -51,7 +52,6 @@ public class ChatService {
 			String message = rootNode.path("message").asText();
 			//ChatHistory 저장
 			chatHistoryService.saveChatHistory(request.getQuestion(), message, opt);
-
 			return new ChatResponse(message);
 		} catch (Exception e) {
 			System.err.println("Error occurred while calling AI server: " + e.getMessage());
