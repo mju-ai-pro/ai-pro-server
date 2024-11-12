@@ -45,13 +45,11 @@ public class ChatService {
 
         try {
             String response = restTemplate.postForObject(uri, aiRequest, String.class);
-
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(response);
 
             String message = rootNode.path("message").asText();
             //ChatHistory 저장
-//			chatHistoryService.saveChatHistory(request.getQuestion(), message);
             chatHistoryService.saveChatHistory(request.getQuestion(), message, opt);
 
             return new ChatResponse(message);
