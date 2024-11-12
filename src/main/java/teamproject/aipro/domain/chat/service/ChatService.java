@@ -40,8 +40,6 @@ public class ChatService {
 		aiRequest.setQuestion(request.getQuestion());
 		aiRequest.setRole(roleService.getRole());
 		aiRequest.setChatHistory(new ArrayList<>());
-		//		List<String> chatHistory = convertChatHistoryToList(chatHistoryService.getChatHistory(opt));
-		//		aiRequest.setChatHistory(chatHistory);
 
 		try {
 			String response = restTemplate.postForObject(uri, aiRequest, String.class);
