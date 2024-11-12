@@ -42,7 +42,6 @@ public class ChatService {
         aiRequest.setChatHistory(new ArrayList<>());
 //		List<String> chatHistory = convertChatHistoryToList(chatHistoryService.getChatHistory(opt));
 //		aiRequest.setChatHistory(chatHistory);
-
         try {
             String response = restTemplate.postForObject(uri, aiRequest, String.class);
             ObjectMapper objectMapper = new ObjectMapper();
@@ -63,6 +62,7 @@ public class ChatService {
         if (chatHistories == null || chatHistories.isEmpty()) {
             return List.of(); // 빈 리스트 반환
         }
+
 
         // 각 대화 내역을 "User: 질문\nBot: 응답" 형태의 문자열로 변환하여 리스트로 반환
         return chatHistories.stream()

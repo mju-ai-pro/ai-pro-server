@@ -1,4 +1,5 @@
 package teamproject.aipro.domain.chat.controller;
+import java.util.List;
 
 import java.util.List;
 import lombok.Data;
@@ -16,9 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import teamproject.aipro.domain.chat.dto.response.ChatHistoryResponse;
 import teamproject.aipro.domain.chat.dto.response.ChatCatalogResponse;
 import teamproject.aipro.domain.chat.service.ChatHistoryService;
-
-import java.util.List;
-
 @RestController
 @RequestMapping("/api")
 public class ChatHistoryController {
@@ -34,6 +32,5 @@ public class ChatHistoryController {
     @GetMapping("/getChatCatalog")
     public List<ChatCatalogResponse> getChatCatalog() {
 		return chatHistoryService.getChatCatalog();
-	}
 
 }
