@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ChatHistoryResponse {
-    private String question;
-    private String response;
+	private String question;
+	private String response;
 }

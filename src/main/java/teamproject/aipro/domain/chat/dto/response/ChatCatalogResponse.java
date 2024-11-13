@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ChatCatalogResponse {
-    private String userId;
-    private Long catalogId;
-    private String summary;
+	private String userId;
+	private Long catalogId;
+	private String summary;
 
 }

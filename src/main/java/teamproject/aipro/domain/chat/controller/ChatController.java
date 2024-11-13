@@ -14,35 +14,36 @@ import teamproject.aipro.domain.chat.service.ChatService;
 @RequestMapping("/api/chat")
 public class ChatController {
 
-    private final ChatService chatService;
-    private final ChatHistoryService chatHistoryService;
+	private final ChatService chatService;
+	private final ChatHistoryService chatHistoryService;
 
-    public ChatController(ChatService chatService, ChatHistoryService chatHistoryService) {
-        this.chatService = chatService;
-        this.chatHistoryService = chatHistoryService;
-    }
+	public ChatController(ChatService chatService, ChatHistoryService chatHistoryService) {
+		this.chatService = chatService;
+		this.chatHistoryService = chatHistoryService;
+	}
 
-    @PostMapping("/question")
-    public ResponseEntity<ChatResponse> question(@RequestBody ChatRequest chatRequest, @RequestParam(required = false) String catalogId) {
-        ChatResponse response = (catalogId == null || catalogId.trim().isEmpty())
-                ? processNewCatalogRequest(chatRequest)
-                : processExistingCatalogRequest(chatRequest, catalogId);
-        return ResponseEntity.ok(response);
-    }
+	@PostMapping("/question")
+	public ResponseEntity<ChatResponse> question(@RequestBody ChatRequest chatRequest,
+		@RequestParam(required = false) String catalogId) {
+		ChatResponse response = (catalogId == null || catalogId.trim().isEmpty())
+			? processNewCatalogRequest(chatRequest)
+			: processExistingCatalogRequest(chatRequest, catalogId);
+		return ResponseEntity.ok(response);
+	}
 
-    private ChatResponse processNewCatalogRequest(ChatRequest chatRequest) {
-        ChatResponse response = chatHistoryService.summary(chatRequest);
-        Long newCatalogId = createNewCatalog(chatRequest, response.getMessage());
-        return chatService.question(chatRequest, Long.toString(newCatalogId));
-    }
+	private ChatResponse processNewCatalogRequest(ChatRequest chatRequest) {
+		ChatResponse response = chatHistoryService.summary(chatRequest);
+		Long newCatalogId = createNewCatalog(chatRequest, response.getMessage());
+		return chatService.question(chatRequest, Long.toString(newCatalogId));
+	}
 
-    private Long createNewCatalog(ChatRequest chatRequest, String summaryMessage) {
-        ChatCatalog chatCatalog = new ChatCatalog(chatRequest.getUserId(), summaryMessage);
-        return chatHistoryService.saveChatCatalog(chatCatalog.getUserId(), chatCatalog.getChatSummary()).getId();
-    }
+	private Long createNewCatalog(ChatRequest chatRequest, String summaryMessage) {
+		ChatCatalog chatCatalog = new ChatCatalog(chatRequest.getUserId(), summaryMessage);
+		return chatHistoryService.saveChatCatalog(chatCatalog.getUserId(), chatCatalog.getChatSummary()).getId();
+	}
 
-    private ChatResponse processExistingCatalogRequest(ChatRequest chatRequest, String catalogId) {
-        return chatService.question(chatRequest, catalogId);
-    }
+	private ChatResponse processExistingCatalogRequest(ChatRequest chatRequest, String catalogId) {
+		return chatService.question(chatRequest, catalogId);
+	}
 
 }
