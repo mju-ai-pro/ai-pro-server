@@ -26,7 +26,6 @@ public class ChatController {
 		this.chatService = chatService;
 		this.chatHistoryService = chatHistoryService;
 	}
-
 	@PostMapping("/question")
 	public ResponseEntity<ChatResponse> question(@RequestBody ChatRequest chatRequest,
 		@RequestParam(required = false) String catalogId) {
