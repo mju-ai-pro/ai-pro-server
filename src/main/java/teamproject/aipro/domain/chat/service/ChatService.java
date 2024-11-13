@@ -1,5 +1,6 @@
 package teamproject.aipro.domain.chat.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,16 +33,13 @@ public class ChatService {
 
 	// RestTmeplate으로 AI 서버의 API 호출
 	// 응답을 String 값으로 가져옴
-	public ChatResponse question(ChatRequest request) {
+	public ChatResponse question(ChatRequest request, String opt) {
 		RestTemplate restTemplate = new RestTemplate();
 		AiRequest aiRequest = new AiRequest();
 		aiRequest.setUserId(request.getUserId());
 		aiRequest.setQuestion(request.getQuestion());
 		aiRequest.setRole(roleService.getRole());
-
-		List<String> chatHistory = convertChatHistoryToList(chatHistoryService.getChatHistory(request.getUserId()));
-		System.out.println("chatHistory.size() = " + chatHistory.size());
-		aiRequest.setChatHistory(chatHistory);
+		aiRequest.setChatHistory(new ArrayList<>());
 
 		try {
 			String response = restTemplate.postForObject(uri, aiRequest, String.class);
@@ -51,7 +49,7 @@ public class ChatService {
 
 			String message = rootNode.path("message").asText();
 			//ChatHistory 저장
-			chatHistoryService.saveChatHistory(request.getUserId(),request.getQuestion(),message);
+			chatHistoryService.saveChatHistory(request.getQuestion(), message, opt);
 
 			return new ChatResponse(message);
 		} catch (Exception e) {
@@ -70,4 +68,4 @@ public class ChatService {
 			.map(history -> "User: " + history.getQuestion() + "\nBot: " + history.getResponse())
 			.collect(Collectors.toList());
 	}
-}
+	}
