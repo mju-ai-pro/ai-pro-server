@@ -29,7 +29,7 @@ public class ChatHistoryController {
 		return chatHistoryService.getChatHistory(tempDto.getUserId());
 	}
 	@Data
-	@Getter@Setter
+	@Getter @Setter
 	public static class TempDto{
 		String userId;
 	}
