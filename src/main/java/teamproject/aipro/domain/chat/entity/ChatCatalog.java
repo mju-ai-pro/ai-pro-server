@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class ChatInventory {
+public class ChatCatalog {
     @Id
     @GeneratedValue
     public Long id;
 
-    @OneToMany(mappedBy = "chatInventory", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "chatCatalog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatHistory> chatHistories;
 
     @Column(name = "user_id", nullable = false)
@@ -23,7 +23,7 @@ public class ChatInventory {
     @Column(name = "chatSummary", nullable = false, columnDefinition = "TEXT")
     public String chatSummary; //요약 내용
 
-    public ChatInventory(String userId, String chatSummary) {
+    public ChatCatalog(String userId, String chatSummary) {
         this.userId = userId;
         this.chatSummary = chatSummary;
     }

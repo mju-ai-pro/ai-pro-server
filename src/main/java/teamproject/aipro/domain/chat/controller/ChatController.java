@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import teamproject.aipro.domain.chat.dto.request.ChatRequest;
 import teamproject.aipro.domain.chat.dto.response.ChatResponse;
-import teamproject.aipro.domain.chat.entity.ChatInventory;
+import teamproject.aipro.domain.chat.entity.ChatCatalog;
 import teamproject.aipro.domain.chat.service.ChatHistoryService;
 import teamproject.aipro.domain.chat.service.ChatService;
 
@@ -23,19 +23,17 @@ public class ChatController {
 	}
 
 	@PostMapping("/question")
-	public ResponseEntity<ChatResponse> question(@RequestBody ChatRequest chatRequest, @RequestParam(required = false) String optionalParam) {
-
-		System.out.println("optioanlParam = " + optionalParam);
+	public ResponseEntity<ChatResponse> question(@RequestBody ChatRequest chatRequest, @RequestParam(required = false) String catalogId) {
 		// optionalParam이 없으면 처리 로직 추가
-		if(optionalParam == null || optionalParam.trim().isEmpty()) {
+		if(catalogId == null || catalogId.trim().isEmpty()) {
 			ChatResponse response = chatHistoryService.summary(chatRequest);
-			ChatInventory chatInventory = new ChatInventory(chatRequest.getUserId(),response.getMessage());
-			Long chatInvId = chatHistoryService.saveChatInventory(chatInventory.getUserId(),chatInventory.getChatSummary()).getId();
-			response = chatService.question(chatRequest,Long.toString(chatInvId));
+			ChatCatalog chatCatalog = new ChatCatalog(chatRequest.getUserId(),response.getMessage());
+			Long chatCatalogId = chatHistoryService.saveChatCatalog(chatCatalog.getUserId(), chatCatalog.getChatSummary()).getId();
+			response = chatService.question(chatRequest,Long.toString(chatCatalogId));
 			return ResponseEntity.ok(response);
 		}
 
-		ChatResponse response = chatService.question(chatRequest, optionalParam);
+		ChatResponse response = chatService.question(chatRequest, catalogId);
 		return ResponseEntity.ok(response);
 	}
 }
