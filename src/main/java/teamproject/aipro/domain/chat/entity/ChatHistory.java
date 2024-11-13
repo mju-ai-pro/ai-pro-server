@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Optional;
-
 @Entity
 @Getter
 @NoArgsConstructor
@@ -16,9 +14,9 @@ public class ChatHistory {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "chat_inventory_id")
+	@JoinColumn(name = "chat_Catalog_id")
 	@JsonIgnoreProperties("chatHistories") // 이 필드를 JSON 직렬화에서 제외
-	private ChatInventory chatInventory;
+	private ChatCatalog chatCatalog;
 
 	@Column(name = "question", nullable = false, columnDefinition = "TEXT")
 	private String question; // 질문 내용
@@ -31,12 +29,12 @@ public class ChatHistory {
 		this.response = response;
 	}
 
-	public ChatInventory getChatInventory() {
-		return chatInventory;
+	public ChatCatalog getChatCatalog() {
+		return chatCatalog;
 	}
 
-	public void setChatInventory(ChatInventory chatInventory) {
-		this.chatInventory = chatInventory;
+	public void setChatCatalog(ChatCatalog chatCatalog) {
+		this.chatCatalog = chatCatalog;
 	}
 
 }
