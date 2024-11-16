@@ -2,6 +2,7 @@ package teamproject.aipro.domain.member.controller;
 
 import java.security.Principal;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,9 @@ public class MemberController {
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
 		String token = memberService.login(loginRequest);
+		if ("Invalid id or password".equals(token)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid id or password");
+		}
 		return ResponseEntity.ok(token);
 	}
 
