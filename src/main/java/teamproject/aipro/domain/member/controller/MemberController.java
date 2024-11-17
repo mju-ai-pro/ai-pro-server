@@ -35,7 +35,7 @@ public class MemberController {
 	public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
 		String token = memberService.login(loginRequest);
 		if ("Invalid id or password".equals(token)) {
-			return ResponseEntity.ok("Login failed: Invalid id or password");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid id or password");
 		}
 		return ResponseEntity.ok(token);
 	}
