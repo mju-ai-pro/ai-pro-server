@@ -51,8 +51,8 @@ public class ChatHistoryService {
 			.collect(Collectors.toList());
 	}
 
-	public List<ChatCatalogResponse> getChatCatalog() {
-		return chatCatalogRepository.findAll().stream()
+	public List<ChatCatalogResponse> getChatCatalog(String userId) {
+		return chatCatalogRepository.findByUserId(userId).stream()
 			.map(chatCatalog -> new ChatCatalogResponse(
 				chatCatalog.getUserId(),
 				chatCatalog.getId(),
@@ -62,7 +62,7 @@ public class ChatHistoryService {
 
 	public ChatResponse summary(ChatRequest request) {
 		RestTemplate restTemplate = new RestTemplate();
-		String setRole = "답변에 대한 한글 20자 내의 간단한 요약을 해주면 돼.";
+		String setRole = "답변의 요약을 20자 이하로 해주세요. 예: '빠른 처리 방법 설명'.";
 		AiRequest aiRequest = new AiRequest();
 		aiRequest.setUserId(request.getUserId());
 		aiRequest.setQuestion(request.getQuestion());
