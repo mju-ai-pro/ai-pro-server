@@ -64,7 +64,7 @@ public class ChatHistoryService {
 		RestTemplate restTemplate = new RestTemplate();
 		String setRole = "답변의 요약을 20자 이하로 해주세요. 예: '빠른 처리 방법 설명'.";
 		AiRequest aiRequest = new AiRequest();
-		aiRequest.setUserId(request.getUserId());
+		aiRequest.setUserId("a"); //수정
 		aiRequest.setQuestion(request.getQuestion());
 		aiRequest.setRole(setRole);
 		aiRequest.setChatHistory(new ArrayList<>());
@@ -75,10 +75,10 @@ public class ChatHistoryService {
 			JsonNode rootNode = objectMapper.readTree(response);
 
 			String message = rootNode.path("message").asText();
-			return new ChatResponse(message);
+			return new ChatResponse(message,"d"); //임시
 		} catch (Exception e) {
 			System.err.println("Error occurred while calling AI server: " + e.getMessage());
-			return new ChatResponse("Error: Unable to get response from AI server.");
+			return new ChatResponse("Error: Unable to get response from AI server.","ㅇ");//임시
 		}
 	}
 

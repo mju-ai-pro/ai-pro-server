@@ -7,4 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ChatResponse {
 	private String message;
+	private String catalogId;
 }
