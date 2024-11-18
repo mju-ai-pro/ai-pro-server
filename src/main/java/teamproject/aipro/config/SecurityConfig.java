@@ -1,5 +1,7 @@
 package teamproject.aipro.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,11 +32,23 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.csrf(csrf -> csrf.disable())
+			.cors(cors -> cors.configurationSource(request -> {
+				var config = new org.springframework.web.cors.CorsConfiguration();
+				config.setAllowedOrigins(List.of("http://localhost:3000", "https://ai-pro-fe.vercel.app"));
+				config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+				config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+				config.setAllowCredentials(true);
+				return config;
+			}))
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(requests -> requests
-				.anyRequest().permitAll());
+				.anyRequest().permitAll())
+			.addFilterBefore(jwtAuthenticationFilter(authenticationManager(null)),
+				org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
+
+
 
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) {
