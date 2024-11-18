@@ -1,10 +1,16 @@
 jwt:
   secret: secretkeyteamprojectAiProMJUsecretkeyteamprojectAiProMJUsecretkeyteamprojectAiProMJUsecretkeyteamprojectAiProMJU
+#spring:
+#  datasource:
+#    url: ${MYSQL_URL}
+#    username: ${MYSQL_USERNAME}
+#    password: ${MYSQL_PASSWORD}
+#    driver-class-name: com.mysql.cj.jdbc.Driver
 spring:
   datasource:
-    url: ${MYSQL_URL}
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://localhost:3306/aaa?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: '!ehdgml12'
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
