@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import teamproject.aipro.domain.chat.dto.response.ChatCatalogResponse;
 import teamproject.aipro.domain.chat.dto.response.ChatHistoryResponse;
 import teamproject.aipro.domain.chat.service.ChatHistoryService;
+
 
 @RestController
 @RequestMapping("/api")
