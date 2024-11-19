@@ -32,9 +32,8 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 	}
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws
-		IOException,
-		ServletException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+		throws IOException, ServletException {
 		String token = request.getHeader("Authorization");
 		if (token != null && token.startsWith("Bearer ")) {
 			token = token.replace("Bearer ", "");
@@ -51,14 +50,26 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 					SecurityContextHolder.getContext().setAuthentication(auth);
 				}
 			} catch (ExpiredJwtException e) {
-				System.out.println("JWT 토큰이 만료되었습니다: " + e.getMessage());
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.getWriter().write("JWT token has expired.");
+				return;
 			} catch (SignatureException e) {
-				System.out.println("JWT 서명이 유효하지 않습니다: " + e.getMessage());
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.getWriter().write("Invalid JWT signature.");
+				return;
 			} catch (MalformedJwtException e) {
-				System.out.println("JWT 형식이 유효하지 않습니다: " + e.getMessage());
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().write("Malformed JWT token.");
+				return;
 			} catch (Exception e) {
-				System.out.println("JWT 처리 중 오류 발생: " + e.getMessage());
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().write("Unexpected error while processing JWT token.");
+				return;
 			}
+		} else {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().write("Authorization header is missing or does not start with 'Bearer '.");
+			return;
 		}
 		chain.doFilter(request, response);
 	}
