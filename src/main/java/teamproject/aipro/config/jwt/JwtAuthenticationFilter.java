@@ -34,6 +34,13 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 		throws IOException, ServletException {
+		String path = request.getRequestURI();
+
+		if (path.startsWith("/api/member")) {
+			chain.doFilter(request, response);
+			return;
+		}
+
 		String token = request.getHeader("Authorization");
 		if (token != null && token.startsWith("Bearer ")) {
 			token = token.replace("Bearer ", "");
