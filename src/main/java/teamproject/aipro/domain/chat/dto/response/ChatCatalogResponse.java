@@ -5,7 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ChatResponse {
-	private String message;
-	private String catalogId;
+public class ChatCatalogResponse {
+	private String userId;
+	private Long catalogId;
+	private String summary;
+
 }
