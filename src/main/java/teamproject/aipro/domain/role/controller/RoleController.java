@@ -1,5 +1,7 @@
 package teamproject.aipro.domain.role.controller;
 
+import java.security.Principal;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,13 +26,16 @@ public class RoleController {
 	}
 
 	@PostMapping("/set")
-	public ResponseEntity<RoleResponse> setRole(@RequestBody RoleRequest roleRequest) {
-		RoleResponse response = roleService.setRole(roleRequest);
+	public ResponseEntity<RoleResponse> setRole(Principal principal, @RequestBody RoleRequest roleRequest) {
+		String userId = principal.getName();
+		RoleResponse response = roleService.setRole(userId, roleRequest.getRole());
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/get")
-	public String getRole() {
-		return roleService.getRole();
+	public ResponseEntity<String> getRole(Principal principal) {
+		String userId = principal.getName();
+		String role = roleService.getRole(userId);
+		return ResponseEntity.ok(role);
 	}
 }

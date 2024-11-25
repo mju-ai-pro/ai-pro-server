@@ -1,24 +1,23 @@
 package teamproject.aipro.domain.role.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
-import teamproject.aipro.domain.role.dto.request.RoleRequest;
 import teamproject.aipro.domain.role.dto.response.RoleResponse;
 
 @Service
 public class RoleService {
 
-	private String currentRole;
+	private final Map<String, String> userRoles = new HashMap<>();
 
-	public RoleResponse setRole(RoleRequest roleRequest) {
-		this.currentRole = roleRequest.getRole();
-		return new RoleResponse(currentRole);
+	public RoleResponse setRole(String userId, String role) {
+		userRoles.put(userId, role);
+		return new RoleResponse(role);
 	}
 
-	public String getRole() {
-		if (currentRole == null) {
-			return " ";
-		}
-		return currentRole;
+	public String getRole(String userId) {
+		return userRoles.getOrDefault(userId, " ");
 	}
 }
