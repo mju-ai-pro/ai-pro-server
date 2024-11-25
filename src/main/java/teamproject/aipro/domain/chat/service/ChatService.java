@@ -38,7 +38,7 @@ public class ChatService {
 		AiRequest aiRequest = new AiRequest();
 		aiRequest.setUserId("a"); //수정
 		aiRequest.setQuestion(request.getQuestion());
-		aiRequest.setRole(roleService.getRole());
+		aiRequest.setRole(roleService.getRole("a"));
 		aiRequest.setChatHistory(new ArrayList<>());
 
 		try {
@@ -51,10 +51,10 @@ public class ChatService {
 			//ChatHistory 저장
 			chatHistoryService.saveChatHistory(request.getQuestion(), message, opt);
 
-			return new ChatResponse(message,opt);
+			return new ChatResponse(message, opt);
 		} catch (Exception e) {
 			System.err.println("Error occurred while calling AI server: " + e.getMessage());
-			return new ChatResponse("Error: Unable to get response from AI server.",opt);//임시
+			return new ChatResponse("Error: Unable to get response from AI server.", opt);//임시
 		}
 	}
 
@@ -68,4 +68,4 @@ public class ChatService {
 			.map(history -> "User: " + history.getQuestion() + "\nBot: " + history.getResponse())
 			.collect(Collectors.toList());
 	}
-	}
+}
