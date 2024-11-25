@@ -14,8 +14,8 @@ import teamproject.aipro.domain.role.dto.request.RoleRequest;
 import teamproject.aipro.domain.role.dto.response.RoleResponse;
 import teamproject.aipro.domain.role.service.RoleService;
 
-@CrossOrigin(origins = {"http://localhost:3000", "https://ai-pro-fe.vercel.app"})
 @RestController
+@CrossOrigin(origins = {"*"})
 @RequestMapping("/api/role")
 public class RoleController {
 

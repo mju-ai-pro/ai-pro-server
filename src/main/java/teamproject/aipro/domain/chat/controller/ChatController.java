@@ -3,8 +3,6 @@ package teamproject.aipro.domain.chat.controller;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import io.jsonwebtoken.Claims;
@@ -15,8 +13,8 @@ import teamproject.aipro.domain.chat.entity.ChatCatalog;
 import teamproject.aipro.domain.chat.service.ChatHistoryService;
 import teamproject.aipro.domain.chat.service.ChatService;
 
-@CrossOrigin(origins = {"http://localhost:3000", "https://ai-pro-fe.vercel.app"})
 @RestController
+@CrossOrigin(origins = {"*"})
 @RequestMapping("/api/chat")
 public class ChatController {
 
