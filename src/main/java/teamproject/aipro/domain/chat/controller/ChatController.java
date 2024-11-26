@@ -35,18 +35,29 @@ public class ChatController {
 		@RequestBody ChatRequest chatRequest,
 		@RequestParam(required = false) String catalogId) {
 
+		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+					.body(new ChatResponse("Invalid or missing Authorization header.", catalogId));
+		}
+		
 		// Authorization 헤더에서 토큰을 파싱하여 사용자 ID 추출
 		String userId = extractUserIdFromToken(authHeader);
 		System.out.println("userId = " + userId);
 		if (userId == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ChatResponse("Invalid token.", catalogId));
 		}
 
-		ChatResponse response = (catalogId == null || catalogId.trim().isEmpty())
-			? processNewCatalogRequest(chatRequest, userId)
-			: processExistingCatalogRequest(chatRequest, catalogId);
+		try {
+			ChatResponse response = (catalogId == null || catalogId.trim().isEmpty())
+				? processNewCatalogRequest(chatRequest, userId)
+				: processExistingCatalogRequest(chatRequest, catalogId);
 
-		return ResponseEntity.ok(response);
+			return ResponseEntity.ok(response);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ChatResponse(e.getMessage(), catalogId));
+		} catch (Exception e) {
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ChatResponse("An error occurred while processing the request.", catalogId));
+		}
 	}
 
 	// 토큰에서 사용자 ID 추출 메서드
