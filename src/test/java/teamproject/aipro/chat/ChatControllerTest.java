@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -58,6 +59,7 @@ public class ChatControllerTest {
     }
 
     @Test
+    @DisplayName(value = "유효한 토큰/새 catalog - 채팅 성공")
     void whenValidTokenAndNewCatalog_thenSuccess() {
         ChatRequest chatRequest = new ChatRequest();
         chatRequest.setQuestion("Test question");
@@ -69,16 +71,15 @@ public class ChatControllerTest {
         when(chatHistoryService.saveChatCatalog(anyString(), anyString())).thenReturn(mockCatalog);
         when(chatService.question(any(ChatRequest.class), anyString())).thenReturn(mockFinalResponse);
 
-        // Act
         ResponseEntity<ChatResponse> response = chatController.question(validToken, chatRequest, null);
 
-        // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Final response", response.getBody().getMessage());
     }
 
     @Test
+    @DisplayName(value = "무효한 토큰/catalog 없음 - 인증 실패")
     void whenInvalidToken_thenUnauthorized() {
         ChatRequest chatRequest = new ChatRequest();
         chatRequest.setQuestion("Test question");
@@ -90,6 +91,7 @@ public class ChatControllerTest {
     }
 
     @Test
+    @DisplayName(value = "토큰 없음/catalog 없음 - 인증 실패")
     void whenNoToken_thenUnauthorized() {
         ChatRequest chatRequest = new ChatRequest();
         chatRequest.setQuestion("Test question");
@@ -101,6 +103,7 @@ public class ChatControllerTest {
     }
 
     @Test
+    @DisplayName(value = "유효한 토큰토큰/기존 catalog - 인증 실패")
     void whenValidTokenAndExistingCatalog_thenSuccess() {
         ChatRequest chatRequest = new ChatRequest();
         chatRequest.setQuestion("Test question");
@@ -117,6 +120,7 @@ public class ChatControllerTest {
     }
 
     @Test
+    @DisplayName(value = "서비스 에러 - 서버 에러")
     void whenServiceThrowsException_thenInternalServerError() {
         ChatRequest chatRequest = new ChatRequest();
         chatRequest.setQuestion("Test question");
@@ -130,6 +134,7 @@ public class ChatControllerTest {
     }
 
     @Test
+    @DisplayName(value = "잘못된 Argument - AI 서버에 잘못된 요청")
     void whenServiceThrowsIllegalArgument_thenBadRequest() {
         ChatRequest chatRequest = new ChatRequest();
         chatRequest.setQuestion("Test question");
