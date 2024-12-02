@@ -21,13 +21,15 @@ public class ChatService {
 
 	private final ChatHistoryService chatHistoryService;
 	private final RoleService roleService;
+	private final RestTemplate restTemplate;
 
 	@Value("${ai.uri}")
 	private String uri;
 
-	public ChatService(ChatHistoryService chatHistoryService, RoleService roleService) {
+	public ChatService(ChatHistoryService chatHistoryService, RoleService roleService, RestTemplate restTemplate) {
 		this.chatHistoryService = chatHistoryService;
 		this.roleService = roleService;
+		this.restTemplate = restTemplate;
 	}
 
 	// RestTmeplate으로 AI 서버의 API 호출
