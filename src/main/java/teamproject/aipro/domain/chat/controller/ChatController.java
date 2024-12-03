@@ -14,7 +14,7 @@ import teamproject.aipro.domain.chat.service.ChatHistoryService;
 import teamproject.aipro.domain.chat.service.ChatService;
 
 @RestController
-@CrossOrigin(origins = {"*"})
+@CrossOrigin(origins = { "*" })
 @RequestMapping("/api/chat")
 public class ChatController {
 
@@ -31,33 +31,22 @@ public class ChatController {
 
 	@PostMapping("/question")
 	public ResponseEntity<ChatResponse> question(
-		@RequestHeader("Authorization") String authHeader,
-		@RequestBody ChatRequest chatRequest,
-		@RequestParam(required = false) String catalogId) {
+			@RequestHeader("Authorization") String authHeader,
+			@RequestBody ChatRequest chatRequest,
+			@RequestParam(required = false) String catalogId) {
 
-		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-					.body(new ChatResponse("Invalid or missing Authorization header.", catalogId));
-		}
-		
 		// Authorization 헤더에서 토큰을 파싱하여 사용자 ID 추출
 		String userId = extractUserIdFromToken(authHeader);
 		System.out.println("userId = " + userId);
 		if (userId == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ChatResponse("Invalid token.", catalogId));
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 
-		try {
-			ChatResponse response = (catalogId == null || catalogId.trim().isEmpty())
+		ChatResponse response = (catalogId == null || catalogId.trim().isEmpty())
 				? processNewCatalogRequest(chatRequest, userId)
 				: processExistingCatalogRequest(chatRequest, catalogId);
 
-			return ResponseEntity.ok(response);
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ChatResponse(e.getMessage(), catalogId));
-		} catch (Exception e) {
-        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ChatResponse("An error occurred while processing the request.", catalogId));
-		}
+		return ResponseEntity.ok(response);
 	}
 
 	// 토큰에서 사용자 ID 추출 메서드
@@ -68,10 +57,10 @@ public class ChatController {
 			}
 			String jwtToken = authHeader.replace("Bearer ", "");
 			Claims claims = Jwts.parserBuilder()
-				.setSigningKey(secretKey.getBytes()) // secretKey를 JWT 서명 검증에 사용
-				.build()
-				.parseClaimsJws(jwtToken)
-				.getBody();
+					.setSigningKey(secretKey.getBytes()) // secretKey를 JWT 서명 검증에 사용
+					.build()
+					.parseClaimsJws(jwtToken)
+					.getBody();
 			return claims.getSubject(); // JWT의 subject 필드에서 userId 반환
 		} catch (Exception e) {
 			System.err.println("Error decoding JWT: " + e.getMessage());
@@ -84,10 +73,10 @@ public class ChatController {
 		ChatResponse response = chatHistoryService.summary(chatRequest);
 		Long newCatalogId = createNewCatalog(userId, response.getMessage());
 		// 새로운 ChatHistory 저장
-		// chatHistoryService.saveChatHistory(chatRequest.getQuestion(), response.getMessage(), Long.toString(newCatalogId));
+		// chatHistoryService.saveChatHistory(chatRequest.getQuestion(),
+		// response.getMessage(), Long.toString(newCatalogId));
 		return chatService.question(chatRequest, String.valueOf(newCatalogId));
 	}
-
 
 	private Long createNewCatalog(String userId, String summaryMessage) {
 		ChatCatalog chatCatalog = new ChatCatalog(userId, summaryMessage);
