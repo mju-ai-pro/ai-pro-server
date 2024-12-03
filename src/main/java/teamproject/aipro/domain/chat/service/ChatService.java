@@ -33,7 +33,7 @@ public class ChatService {
 
 	// RestTmeplate으로 AI 서버의 API 호출
 	// 응답을 String 값으로 가져옴
-	public ChatResponse question(ChatRequest request, String opt) {
+	public ChatResponse question(ChatRequest request, String catalogId) {
 		RestTemplate restTemplate = new RestTemplate();
 		AiRequest aiRequest = new AiRequest();
 		aiRequest.setUserId("a"); //수정
@@ -49,12 +49,12 @@ public class ChatService {
 
 			String message = rootNode.path("message").asText();
 			//ChatHistory 저장
-			chatHistoryService.saveChatHistory(request.getQuestion(), message, opt);
+			chatHistoryService.saveChatHistory(request.getQuestion(), message, catalogId);
 
-			return new ChatResponse(message, opt);
+			return new ChatResponse(message, catalogId);
 		} catch (Exception e) {
 			System.err.println("Error occurred while calling AI server: " + e.getMessage());
-			return new ChatResponse("Error: Unable to get response from AI server.", opt);//임시
+			return new ChatResponse("Error: Unable to get response from AI server.", catalogId);//임시
 		}
 	}
 
