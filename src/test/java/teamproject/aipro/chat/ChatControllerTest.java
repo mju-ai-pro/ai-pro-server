@@ -48,7 +48,7 @@ public class ChatControllerTest {
     @BeforeEach
     void setUp() {
         ReflectionTestUtils.setField(chatController, "secretKey", secretKey);
-        
+
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         validToken = "Bearer " + Jwts.builder()
                 .setSubject("testUser")
@@ -69,7 +69,7 @@ public class ChatControllerTest {
 
         when(chatHistoryService.summary(any(ChatRequest.class))).thenReturn(mockSummaryResponse);
         when(chatHistoryService.saveChatCatalog(anyString(), anyString())).thenReturn(mockCatalog);
-        when(chatService.question(any(ChatRequest.class), anyString())).thenReturn(mockFinalResponse);
+        when(chatService.question(any(ChatRequest.class), anyString(), anyString())).thenReturn(mockFinalResponse);
 
         ResponseEntity<ChatResponse> response = chatController.question(validToken, chatRequest, null);
 
@@ -110,7 +110,7 @@ public class ChatControllerTest {
         String catalogId = "1";
         ChatResponse mockResponse = new ChatResponse("Test response", catalogId);
 
-        when(chatService.question(any(ChatRequest.class), anyString())).thenReturn(mockResponse);
+        when(chatService.question(any(ChatRequest.class), anyString(), anyString())).thenReturn(mockResponse);
 
         ResponseEntity<ChatResponse> response = chatController.question(validToken, chatRequest, catalogId);
 
@@ -125,7 +125,7 @@ public class ChatControllerTest {
         ChatRequest chatRequest = new ChatRequest();
         chatRequest.setQuestion("Test question");
         when(chatHistoryService.summary(any(ChatRequest.class)))
-            .thenThrow(new RuntimeException("Service error"));
+                .thenThrow(new RuntimeException("Service error"));
 
         ResponseEntity<ChatResponse> response = chatController.question(validToken, chatRequest, null);
 
@@ -139,7 +139,7 @@ public class ChatControllerTest {
         ChatRequest chatRequest = new ChatRequest();
         chatRequest.setQuestion("Test question");
         when(chatHistoryService.summary(any(ChatRequest.class)))
-            .thenThrow(new IllegalArgumentException("Invalid argument"));
+                .thenThrow(new IllegalArgumentException("Invalid argument"));
 
         ResponseEntity<ChatResponse> response = chatController.question(validToken, chatRequest, null);
 

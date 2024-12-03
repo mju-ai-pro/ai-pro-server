@@ -33,7 +33,7 @@ public class ChatService {
 		AiRequest aiRequest = new AiRequest();
 		aiRequest.setUserId(userId);
 		aiRequest.setQuestion(request.getQuestion());
-		aiRequest.setRole(roleService.getRole("a"));
+		aiRequest.setRole(roleService.getRole(userId));
 		aiRequest.setChatHistory(chatHistoryService.getChatHistory(userId));
 
 		try {

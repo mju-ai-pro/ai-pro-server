@@ -39,7 +39,7 @@ public class ChatServiceTest {
 
     @BeforeEach
     public void setUp() {
-        chatService = new ChatService(chatHistoryService, roleService, restTemplate);
+        chatService = new ChatService(chatHistoryService, roleService);
 
         ReflectionTestUtils.setField(chatService, "uri", "http://test-ai-server.com/api");
 
@@ -52,6 +52,7 @@ public class ChatServiceTest {
         ChatRequest chatRequest = new ChatRequest();
         chatRequest.setQuestion("Test question");
         String opt = "testOpt";
+        String userId = "testId";
 
         // AI 서버 응답 Mock
         String mockJsonResponse = new ObjectMapper()
@@ -59,7 +60,7 @@ public class ChatServiceTest {
         when(restTemplate.postForObject(anyString(), any(), eq(String.class)))
                 .thenReturn(mockJsonResponse);
 
-        ChatResponse response = chatService.question(chatRequest, opt);
+        ChatResponse response = chatService.question(chatRequest, opt, userId);
 
         assertNotNull(response);
         assertEquals("Test response", response.getMessage());
@@ -78,11 +79,12 @@ public class ChatServiceTest {
         ChatRequest chatRequest = new ChatRequest();
         chatRequest.setQuestion("Test question");
         String opt = "testOpt";
+        String userId = "testId";
 
         when(restTemplate.postForObject(anyString(), any(), eq(String.class)))
                 .thenReturn("");
 
-        ChatResponse response = chatService.question(chatRequest, opt);
+        ChatResponse response = chatService.question(chatRequest, opt, userId);
 
         assertEquals("Error: Unable to get response from AI server.", response.getMessage());
     }
@@ -93,11 +95,12 @@ public class ChatServiceTest {
         ChatRequest chatRequest = new ChatRequest();
         chatRequest.setQuestion("Test question");
         String opt = "testOpt";
+        String userId = "testId";
 
         when(restTemplate.postForObject(anyString(), any(), eq(String.class)))
                 .thenThrow(new RestClientException("Connection failed"));
 
-        ChatResponse response = chatService.question(chatRequest, opt);
+        ChatResponse response = chatService.question(chatRequest, opt, userId);
 
         assertEquals("Error: Unable to reach AI server.", response.getMessage());
     }
@@ -108,11 +111,12 @@ public class ChatServiceTest {
         ChatRequest chatRequest = new ChatRequest();
         chatRequest.setQuestion("Test question");
         String opt = "testOpt";
+        String userId = "testId";
 
         when(restTemplate.postForObject(anyString(), any(), eq(String.class)))
                 .thenReturn("{invalid json");
 
-        ChatResponse response = chatService.question(chatRequest, opt);
+        ChatResponse response = chatService.question(chatRequest, opt, userId);
 
         assertEquals("Error: Unable to process AI response.", response.getMessage());
     }
