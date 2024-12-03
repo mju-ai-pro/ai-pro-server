@@ -34,7 +34,7 @@ public class ChatService {
 		aiRequest.setUserId(userId);
 		aiRequest.setQuestion(request.getQuestion());
 		aiRequest.setRole(roleService.getRole(userId));
-		aiRequest.setChatHistory(chatHistoryService.getChatHistory(userId));
+		aiRequest.setChatHistory(chatHistoryService.getChatHistoryAsStringList(catalogId));
 
 		try {
 			String response = restTemplate.postForObject(uri, aiRequest, String.class);

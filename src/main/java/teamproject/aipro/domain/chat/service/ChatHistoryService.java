@@ -51,6 +51,12 @@ public class ChatHistoryService {
 			.collect(Collectors.toList());
 	}
 
+	public List<String> getChatHistoryAsStringList(String chatCatalogId) {
+		return getChatHistory(chatCatalogId).stream()
+				.map(chatHistory -> chatHistory.getQuestion() + " / " + chatHistory.getResponse())
+				.collect(Collectors.toList());
+	}
+
 	public List<ChatCatalogResponse> getChatCatalog(String userId) {
 		return chatCatalogRepository.findByUserId(userId).stream()
 			.map(chatCatalog -> new ChatCatalogResponse(
@@ -75,10 +81,10 @@ public class ChatHistoryService {
 			JsonNode rootNode = objectMapper.readTree(response);
 
 			String message = rootNode.path("summary").asText();
-			return new ChatResponse(message,"d"); //임시
+			return new ChatResponse(message, "d"); //임시
 		} catch (Exception e) {
 			System.err.println("Error occurred while calling AI server: " + e.getMessage());
-			return new ChatResponse("Error: Unable to get response from AI server.","ㅇ");//임시
+			return new ChatResponse("Error: Unable to get response from AI server.", "ㅇ");
 		}
 	}
 

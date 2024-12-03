@@ -12,5 +12,5 @@ public class AiRequest {
 	private String userId;
 	private String role;
 	private String question;
-	private List<ChatHistoryResponse> chatHistory;
+	private List<String> chatHistory;
 }
