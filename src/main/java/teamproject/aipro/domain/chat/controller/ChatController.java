@@ -44,7 +44,7 @@ public class ChatController {
 
 		ChatResponse response = (catalogId == null || catalogId.trim().isEmpty())
 				? processNewCatalogRequest(chatRequest, userId)
-				: processExistingCatalogRequest(chatRequest, catalogId);
+				: processExistingCatalogRequest(chatRequest, catalogId, userId);
 
 		return ResponseEntity.ok(response);
 	}
@@ -75,7 +75,7 @@ public class ChatController {
 		// 새로운 ChatHistory 저장
 		// chatHistoryService.saveChatHistory(chatRequest.getQuestion(),
 		// response.getMessage(), Long.toString(newCatalogId));
-		return chatService.question(chatRequest, String.valueOf(newCatalogId));
+		return chatService.question(chatRequest, String.valueOf(newCatalogId), userId);
 	}
 
 	private Long createNewCatalog(String userId, String summaryMessage) {
@@ -83,7 +83,7 @@ public class ChatController {
 		return chatHistoryService.saveChatCatalog(chatCatalog.getUserId(), chatCatalog.getChatSummary()).getId();
 	}
 
-	private ChatResponse processExistingCatalogRequest(ChatRequest chatRequest, String catalogId) {
-		return chatService.question(chatRequest, catalogId);
+	private ChatResponse processExistingCatalogRequest(ChatRequest chatRequest, String catalogId, String userId) {
+		return chatService.question(chatRequest, catalogId, userId);
 	}
 }
