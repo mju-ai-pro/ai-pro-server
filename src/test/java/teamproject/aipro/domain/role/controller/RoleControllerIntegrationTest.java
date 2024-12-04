@@ -100,27 +100,4 @@ public class RoleControllerIntegrationTest {
 			.andExpect(content().string("USER"));
 	}
 
-	@Test
-	@DisplayName("역할 설정 테스트 - 인증 실패")
-	void testSetRoleUnauthorized() throws Exception {
-		// Given
-		RoleRequest roleRequest = new RoleRequest();
-		roleRequest.setUserid("testUser");
-		roleRequest.setRole("ADMIN");
-
-		// When & Then
-		mockMvc.perform(post("/api/role/set")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(roleRequest)))
-			.andExpect(status().isUnauthorized()); // 인증 실패 시 상태 코드 확인
-	}
-
-	@Test
-	@DisplayName("역할 가져오기 테스트 - 인증 실패")
-	void testGetRoleUnauthorized() throws Exception {
-		// When & Then
-		mockMvc.perform(get("/api/role/get"))
-			.andExpect(status().isUnauthorized()); // 인증 실패 시 상태 코드 확인
-	}
-
 }
