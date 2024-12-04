@@ -1,15 +1,9 @@
 package teamproject.aipro.domain.chat.service;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,109 +11,54 @@ import teamproject.aipro.domain.chat.dto.request.AiRequest;
 import teamproject.aipro.domain.chat.dto.request.ChatRequest;
 import teamproject.aipro.domain.chat.dto.response.ChatResponse;
 import teamproject.aipro.domain.chat.entity.ChatCatalog;
-import teamproject.aipro.domain.chat.exception.ChatException;
 import teamproject.aipro.domain.role.service.RoleService;
 
 @Service
 public class ChatService {
 
-	private final Logger logger = LoggerFactory.getLogger(ChatService.class);
-
 	private final ChatHistoryService chatHistoryService;
 	private final RoleService roleService;
-	private final RestTemplate restTemplate;
-	private final ObjectMapper objectMapper;
 
 	@Value("${ai.uri}")
 	private String uri;
 
-	public ChatService(ChatHistoryService chatHistoryService,
-		RoleService roleService,
-		RestTemplate restTemplate,
-		ObjectMapper objectMapper) {
+	public ChatService(ChatHistoryService chatHistoryService, RoleService roleService) {
 		this.chatHistoryService = chatHistoryService;
 		this.roleService = roleService;
-		this.restTemplate = restTemplate;
-		this.objectMapper = objectMapper;
 	}
 
+	// RestTmeplate으로 AI 서버의 API 호출
+	// 응답을 String 값으로 가져옴
 	public ChatResponse question(ChatRequest request, String catalogId, String userId) {
-		validateInputs(request, catalogId, userId);
-
-		AiRequest aiRequest = prepareAiRequest(request, catalogId, userId);
-
-		String response = callAiServer(aiRequest);
-		String message = extractMessageFromResponse(response);
-
-		chatHistoryService.saveChatHistory(request.getQuestion(), message, catalogId);
-
-		return new ChatResponse(message, catalogId);
-	}
-
-	private void validateInputs(ChatRequest request, String catalogId, String userId) {
-		if (request == null || request.getQuestion() == null || request.getQuestion().trim().isEmpty()) {
-			throw new ChatException("Invalid chat request: Question cannot be null or empty");
-		}
-
-		if (userId == null || userId.trim().isEmpty()) {
-			throw new ChatException("Invalid user ID");
-		}
-
-		if (catalogId == null || catalogId.trim().isEmpty()) {
-			throw new ChatException("Invalid catalog ID");
-		}
-	}
-
-	private AiRequest prepareAiRequest(ChatRequest request, String catalogId, String userId) {
+		RestTemplate restTemplate = new RestTemplate();
 		AiRequest aiRequest = new AiRequest();
 		aiRequest.setUserId(userId);
 		aiRequest.setQuestion(request.getQuestion());
 		aiRequest.setRole(roleService.getRole(userId));
+		aiRequest.setChatHistory(chatHistoryService.getChatHistoryAsStringList(catalogId));
 
-		List<String> chatHistory = chatHistoryService.getChatHistoryAsStringList(catalogId);
-		aiRequest.setChatHistory(chatHistory);
-
-		return aiRequest;
-	}
-
-	private String callAiServer(AiRequest aiRequest) {
 		try {
-			return restTemplate.postForObject(uri, aiRequest, String.class);
-		} catch (RestClientException e) {
-			logger.error("Error calling AI server", e);
-			throw new ChatException("Failed to connect to AI server", e);
-		}
-	}
+			String response = restTemplate.postForObject(uri, aiRequest, String.class);
 
-	private String extractMessageFromResponse(String response) {
-		try {
-
-			if (response == null || response.trim().isEmpty()) {
-				logger.warn("AI server returned an empty response.");
-				throw new ChatException("Received empty response from AI server");
-			}
-
+			ObjectMapper objectMapper = new ObjectMapper();
 			JsonNode rootNode = objectMapper.readTree(response);
-			JsonNode messageNode = rootNode.path("message");
-			if (messageNode.isMissingNode() || messageNode.isNull()) {
-				throw new ChatException("No 'message' field in AI server response");
-			}
 
-			String message = messageNode.asText();
-			if (message == null || message.trim().isEmpty()) {
-				throw new ChatException("Empty 'message' in AI server response");
-			}
+			String message = rootNode.path("message").asText();
+			// ChatHistory 저장
+			chatHistoryService.saveChatHistory(request.getQuestion(), message, catalogId);
 
-			return message;
-		} catch (JsonProcessingException e) {
-			logger.error("Error parsing AI server response", e);
-			throw new ChatException("Invalid response format from AI server", e);
+			return new ChatResponse(message, catalogId);
+		} catch (Exception e) {
+			System.err.println("Error occurred while calling AI server: " + e.getMessage());
+			return new ChatResponse("Error: Unable to get response from AI server.", catalogId);
 		}
 	}
 
 	public ChatResponse processNewCatalogRequest(ChatRequest chatRequest, String userId) {
+		// AI 서버로부터 요약 받기
 		ChatResponse response = chatHistoryService.summary(chatRequest);
 		Long newCatalogId = createNewCatalog(userId, response.getMessage());
+		// 새로운 ChatHistory 저장
 		return question(chatRequest, String.valueOf(newCatalogId), userId);
 	}
 
