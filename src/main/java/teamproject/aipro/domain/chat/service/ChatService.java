@@ -1,5 +1,7 @@
 package teamproject.aipro.domain.chat.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -35,7 +37,8 @@ public class ChatService {
 		aiRequest.setUserId(userId);
 		aiRequest.setQuestion(request.getQuestion());
 		aiRequest.setRole(roleService.getRole(userId));
-		aiRequest.setChatHistory(chatHistoryService.getChatHistoryAsStringList(catalogId));
+		List<String> chatHistory = chatHistoryService.getChatHistoryAsStringList(catalogId);
+		aiRequest.setChatHistory(chatHistory);
 
 		try {
 			String response = restTemplate.postForObject(uri, aiRequest, String.class);

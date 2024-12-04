@@ -4,24 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import teamproject.aipro.domain.chat.dto.request.AiRequest;
 import teamproject.aipro.domain.chat.dto.request.ChatRequest;
-import teamproject.aipro.domain.chat.dto.response.ChatHistoryResponse;
 import teamproject.aipro.domain.chat.dto.response.ChatCatalogResponse;
+import teamproject.aipro.domain.chat.dto.response.ChatHistoryResponse;
 import teamproject.aipro.domain.chat.dto.response.ChatResponse;
-import teamproject.aipro.domain.chat.entity.ChatHistory;
 import teamproject.aipro.domain.chat.entity.ChatCatalog;
-import teamproject.aipro.domain.chat.repository.ChatHistoryRepository;
+import teamproject.aipro.domain.chat.entity.ChatHistory;
 import teamproject.aipro.domain.chat.repository.ChatCatalogRepository;
+import teamproject.aipro.domain.chat.repository.ChatHistoryRepository;
 
 @Service
 public class ChatHistoryService {
@@ -52,9 +51,9 @@ public class ChatHistoryService {
 	}
 
 	public List<String> getChatHistoryAsStringList(String chatCatalogId) {
-		return getChatHistory(chatCatalogId).stream()
-				.map(chatHistory -> chatHistory.getQuestion() + " / " + chatHistory.getResponse())
-				.collect(Collectors.toList());
+		return chatHistoryRepository.findByChatCatalog_Id(Long.parseLong(chatCatalogId)).stream()
+			.map(chatHistory -> chatHistory.getQuestion() + " / " + chatHistory.getResponse())
+			.collect(Collectors.toList());
 	}
 
 	public List<ChatCatalogResponse> getChatCatalog(String userId) {
