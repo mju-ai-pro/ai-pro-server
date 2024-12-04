@@ -16,7 +16,7 @@ import teamproject.aipro.domain.chat.dto.response.ChatResponse;
 import teamproject.aipro.domain.chat.service.ChatService;
 
 @RestController
-@CrossOrigin(origins = { "*" })
+@CrossOrigin(origins = {"*"})
 @RequestMapping("/api/chat")
 public class ChatController {
 
@@ -28,20 +28,19 @@ public class ChatController {
 
 	@PostMapping("/question")
 	public ResponseEntity<ChatResponse> question(
-			Principal principal,
-			@RequestBody ChatRequest chatRequest,
-			@RequestParam(required = false) String catalogId) {
+		Principal principal,
+		@RequestBody ChatRequest chatRequest,
+		@RequestParam(required = false) String catalogId) {
 
 		String userId = principal.getName();
-		System.out.println("userId = " + userId);
 
 		if (userId == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 
 		ChatResponse response = (catalogId == null || catalogId.trim().isEmpty())
-				? chatService.processNewCatalogRequest(chatRequest, userId)
-				: chatService.processExistingCatalogRequest(chatRequest, catalogId, userId);
+			? chatService.processNewCatalogRequest(chatRequest, userId)
+			: chatService.processExistingCatalogRequest(chatRequest, catalogId, userId);
 
 		return ResponseEntity.ok(response);
 	}
