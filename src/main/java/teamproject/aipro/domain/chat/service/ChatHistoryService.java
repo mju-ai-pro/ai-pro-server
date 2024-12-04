@@ -29,7 +29,7 @@ public class ChatHistoryService {
 	private ChatHistoryRepository chatHistoryRepository;
 	@Autowired
 	private ChatCatalogRepository chatCatalogRepository;
-	@Value("${ai.uri}")
+	@Value("${ai.summary}")
 	private String uri;
 
 	public ChatHistory saveChatHistory(String question, String response, String chatInvId) {
@@ -51,6 +51,12 @@ public class ChatHistoryService {
 			.collect(Collectors.toList());
 	}
 
+	public List<String> getChatHistoryAsStringList(String chatCatalogId) {
+		return getChatHistory(chatCatalogId).stream()
+				.map(chatHistory -> chatHistory.getQuestion() + " / " + chatHistory.getResponse())
+				.collect(Collectors.toList());
+	}
+
 	public List<ChatCatalogResponse> getChatCatalog(String userId) {
 		return chatCatalogRepository.findByUserId(userId).stream()
 			.map(chatCatalog -> new ChatCatalogResponse(
@@ -62,7 +68,7 @@ public class ChatHistoryService {
 
 	public ChatResponse summary(ChatRequest request) {
 		RestTemplate restTemplate = new RestTemplate();
-		String setRole = "답변의 요약을 20자 이하로 해주세요. 예: '빠른 처리 방법 설명'.";
+		String setRole = "";
 		AiRequest aiRequest = new AiRequest();
 		aiRequest.setUserId("a"); //수정
 		aiRequest.setQuestion(request.getQuestion());
@@ -74,11 +80,11 @@ public class ChatHistoryService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			JsonNode rootNode = objectMapper.readTree(response);
 
-			String message = rootNode.path("message").asText();
-			return new ChatResponse(message,"d"); //임시
+			String message = rootNode.path("summary").asText();
+			return new ChatResponse(message, "d"); //임시
 		} catch (Exception e) {
 			System.err.println("Error occurred while calling AI server: " + e.getMessage());
-			return new ChatResponse("Error: Unable to get response from AI server.","ㅇ");//임시
+			return new ChatResponse("Error: Unable to get response from AI server.", "ㅇ");
 		}
 	}
 
