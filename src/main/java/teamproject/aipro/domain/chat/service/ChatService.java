@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -118,8 +119,11 @@ public class ChatService {
 	}
 
 	public ChatResponse processNewCatalogRequest(ChatRequest chatRequest, String userId) {
+
+		// AI 서버로부터 요약 받기
 		ChatResponse response = chatHistoryService.summary(chatRequest);
 		Long newCatalogId = createNewCatalog(userId, response.getMessage());
+		// 새로운 ChatHistory 저장
 		return question(chatRequest, String.valueOf(newCatalogId), userId);
 	}
 
