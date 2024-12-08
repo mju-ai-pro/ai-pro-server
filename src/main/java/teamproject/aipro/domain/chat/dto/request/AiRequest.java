@@ -4,7 +4,6 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
-import teamproject.aipro.domain.chat.dto.response.ChatHistoryResponse;
 
 @Getter
 @Setter
