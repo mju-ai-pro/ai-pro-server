@@ -13,6 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import teamproject.aipro.config.jwt.JwtAuthenticationFilter;
 
@@ -32,14 +35,8 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.csrf(csrf -> csrf.disable())
-			.cors(cors -> cors.configurationSource(request -> {
-				var config = new org.springframework.web.cors.CorsConfiguration();
-				config.setAllowedOrigins(List.of("*"));
-				config.setAllowedMethods(List.of("*"));
-				config.setAllowedHeaders(List.of("*"));
-				config.setAllowCredentials(true);
-				return config;
-			}))
+			.cors(cors -> cors.disable())
+			.addFilterBefore(corsFilter(), CorsFilter.class)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(requests -> requests
 				.anyRequest().permitAll())
@@ -48,7 +45,18 @@ public class SecurityConfig {
 		return http.build();
 	}
 
+	@Bean
+	public CorsFilter corsFilter() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
 
+		config.setAllowCredentials(true);
+		config.addAllowedOriginPattern("*");
+		config.addAllowedHeader("*");
+		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
+	}
 
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) {
