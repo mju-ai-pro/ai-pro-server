@@ -1,4 +1,4 @@
-package teamproject.aipro.chat;
+package teamproject.aipro.domain.chat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -89,9 +89,9 @@ class ChatServiceTest {
 		verify(roleService).getRole(userId);
 		verify(chatHistoryService).getChatHistoryAsStringList(catalogId);
 		verify(chatHistoryService).saveChatHistory(
-			eq(chatRequest.getQuestion()),
-			eq("Mocked AI response"),
-			eq(catalogId)
+			chatRequest.getQuestion(),
+			"Mocked AI response",
+			catalogId
 		);
 	}
 

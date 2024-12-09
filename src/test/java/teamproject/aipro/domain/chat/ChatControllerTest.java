@@ -1,4 +1,4 @@
-package teamproject.aipro.chat;
+package teamproject.aipro.domain.chat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
