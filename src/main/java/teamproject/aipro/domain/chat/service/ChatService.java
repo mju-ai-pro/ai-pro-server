@@ -20,8 +20,6 @@ import teamproject.aipro.domain.role.service.RoleService;
 
 @Service
 public class ChatService {
-
-
 	private final ChatHistoryService chatHistoryService;
 	private final RoleService roleService;
 	private final RestTemplate restTemplate;
@@ -112,11 +110,8 @@ public class ChatService {
 	}
 
 	public ChatResponse processNewCatalogRequest(ChatRequest chatRequest, String userId) {
-
-		// AI 서버로부터 요약 받기
 		ChatResponse response = chatHistoryService.summary(chatRequest);
 		Long newCatalogId = createNewCatalog(userId, response.getMessage());
-		// 새로운 ChatHistory 저장
 		return question(chatRequest, String.valueOf(newCatalogId), userId);
 	}
 
