@@ -36,7 +36,7 @@ public class SecurityConfig {
 				var config = new org.springframework.web.cors.CorsConfiguration();
 
 				config.setAllowCredentials(true);
-				config.setAllowedOriginPatterns(List.of("https://www.mjuaipro.site", "https://ai-pro-fe.vercel.app"));
+				config.setAllowedOrigins(List.of("https://www.mjuaipro.site", "https://ai-pro-fe.vercel.app"));
 				config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 				config.setAllowedHeaders(List.of("Content-Type", "Authorization"));
 
@@ -44,9 +44,11 @@ public class SecurityConfig {
 			}))
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(requests -> requests
+				.requestMatchers("/api/member/duplicate").permitAll()
 				.anyRequest().permitAll())
 			.addFilterBefore(jwtAuthenticationFilter(authenticationManager(null)),
 				org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
+
 		return http.build();
 	}
 
