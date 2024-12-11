@@ -59,4 +59,9 @@ public class MemberController {
 		String userid = principal.getName();
 		return memberService.findByUserId(userid);
 	}
+
+	@DeleteMapping("/remove-duplicates")
+	public List<MemberResponse> removeDuplicateUsers() {
+		return memberService.removeDuplicateUsers();
+	}
 }
