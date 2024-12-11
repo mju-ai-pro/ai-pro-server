@@ -16,3 +16,7 @@ spring:
 ai:
   uri: https://hongkikii.site:444/query
   summary : https://hongkikii.site:444/summary
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web.cors: DEBUG
