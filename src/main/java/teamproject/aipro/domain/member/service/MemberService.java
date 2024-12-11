@@ -72,28 +72,4 @@ public class MemberService {
 			return false;
 		}
 	}
-
-	@Transactional
-	public List<MemberResponse> removeDuplicateUsers() {
-		List<String> duplicateUserIds = memberRepository.findDuplicateUserIds();
-
-		List<MemberResponse> cleanedMembers = new ArrayList<>();
-		for (String userId : duplicateUserIds) {
-			List<Member> members = memberRepository.findAllByUserid(userId);
-
-			if (!members.isEmpty()) {
-				Member primaryMember = members.get(0);
-				members.remove(0);
-				memberRepository.deleteAll(members);
-
-				cleanedMembers.add(new MemberResponse(
-					primaryMember.getId(),
-					primaryMember.getUserid(),
-					primaryMember.getUsername()
-				));
-			}
-		}
-
-		return cleanedMembers;
-	}
 }
