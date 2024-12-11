@@ -17,7 +17,6 @@ import teamproject.aipro.domain.chat.exception.ChatException;
 import teamproject.aipro.domain.chat.service.ChatService;
 
 @RestController
-@CrossOrigin(origins = {"*"})
 @RequestMapping("/api/chat")
 public class ChatController {
 

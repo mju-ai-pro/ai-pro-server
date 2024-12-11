@@ -20,7 +20,6 @@ import teamproject.aipro.domain.member.entity.Member;
 import teamproject.aipro.domain.member.service.MemberService;
 
 @RestController
-@CrossOrigin(origins = {"*"})
 @RequestMapping("/api/member")
 public class MemberController {
 
@@ -59,10 +58,5 @@ public class MemberController {
 	public Member getMemberInfo(Principal principal) {
 		String userid = principal.getName();
 		return memberService.findByUserId(userid);
-	}
-
-	@DeleteMapping("/remove-duplicates")
-	public List<MemberResponse> removeDuplicateUsers() {
-		return memberService.removeDuplicateUsers();
 	}
 }
