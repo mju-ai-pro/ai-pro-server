@@ -38,12 +38,13 @@ public class SecurityConfig {
 				config.setAllowCredentials(true);
 				config.setAllowedOrigins(List.of("https://www.mjuaipro.site", "https://ai-pro-fe.vercel.app"));
 				config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-				config.setAllowedHeaders(List.of("*"));
+				config.setAllowedHeaders(List.of("Content-Type", "Authorization"));
 
 				return config;
 			}))
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(requests -> requests
+				.requestMatchers("/api/member/duplicate").permitAll()
 				.anyRequest().permitAll())
 			.addFilterBefore(jwtAuthenticationFilter(authenticationManager(null)),
 				org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
