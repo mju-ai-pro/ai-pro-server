@@ -36,9 +36,9 @@ public class SecurityConfig {
 				var config = new org.springframework.web.cors.CorsConfiguration();
 
 				config.setAllowCredentials(true);
-				config.setAllowedOriginPatterns(List.of("https://www.mjuaipro.site/", "https://ai-pro-fe.vercel.app/"));
+				config.setAllowedOriginPatterns(List.of("https://www.mjuaipro.site", "https://ai-pro-fe.vercel.app"));
 				config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-				config.setAllowedHeaders(List.of("*"));
+				config.setAllowedHeaders(List.of("Content-Type", "Authorization"));
 
 				return config;
 			}))
