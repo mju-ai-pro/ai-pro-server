@@ -44,7 +44,7 @@ public class SecurityConfig {
 			}))
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(requests -> requests
-				.requestMatchers("/api/member/duplicate").permitAll()  // requestMatchers로 변경
+				.requestMatchers("/api/member/duplicate").permitAll()
 				.anyRequest().permitAll())
 			.addFilterBefore(jwtAuthenticationFilter(authenticationManager(null)),
 				org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
